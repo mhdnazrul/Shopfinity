@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "dvahduu3vLg=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\mhd\\Desktop\\Projects\\shopfinity\\Shopfinity.Domain\\Shopfinity.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\mhd\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\mhd\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.2\\microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\mhd\\.nuget\\packages\\npgsql\\9.0.0\\npgsql.9.0.0.nupkg.sha512",
+    "C:\\Users\\mhd\\.nuget\\packages\\system.text.json\\9.0.0\\system.text.json.9.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
