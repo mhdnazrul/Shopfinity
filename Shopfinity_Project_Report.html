@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shopfinity – Project Report</title>
+<style>
+  body { font-family: 'Arial', sans-serif; line-height: 1.25; color: #1a1a1a; max-width: 850px; margin: 40px auto; padding: 0 30px; }
+  h1 { font-size: 28px; color: #111; border-bottom: 2px solid #2563eb; padding-bottom: 8px; margin-top: 40px; }
+  h2 { font-size: 22px; color: #1e40af; margin-top: 30px; }
+  h3 { font-size: 18px; color: #1e3a5f; margin-top: 24px; }
+  p, li { font-size: 14px; text-align: justify; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  th { background-color: #1e40af; color: #fff; padding: 10px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 8px; vertical-align: top; }
+  tr:nth-child(even) { background-color: #f0f4ff; }
+  .title-page { text-align: center; margin: 120px 0 80px 0; }
+  .title-page h1 { font-size: 42px; border: none; color: #1e40af; }
+  .title-page p { font-size: 16px; color: #555; }
+  ul, ol { margin-left: 18px; }
+</style>
+</head>
+<body>
+
+<!-- ==================== TITLE PAGE ==================== -->
+<div class="title-page">
+  <h1>SHOPFINITY</h1>
+  <p style="font-size:20px; color:#333;">A Modern Full-Stack E-Commerce Platform</p>
+  <br><br>
+  <p><strong>Prepared by:</strong></p>
+  <p>Nazrul Islam (Team Lead — Backend &amp; Architecture)</p>
+  <p>Turjo Naimur (Frontend &amp; UI Design)</p>
+  <br>
+  <p><strong>Date:</strong> May 2026</p>
+  <p><strong>Repository:</strong> github.com/mhdnazrul/shopfinity</p>
+</div>
+
+<div style="page-break-after: always;"></div>
+
+<!-- ==================== TABLE OF CONTENTS ==================== -->
+<h1>Table of Contents</h1>
+<ol>
+  <li>Introduction (1.1 – 1.4)</li>
+  <li>Software Requirements Specification</li>
+  <li>Methodology (3.1 – 3.5)</li>
+  <li>System Implementation Overview (4.1 – 4.2)</li>
+  <li>Risk Analysis (5.1 – 5.2)</li>
+  <li>Social and Security Impact (6.1 – 6.2)</li>
+  <li>Conclusion</li>
+  <li>Appendix (8.1 – 8.2)</li>
+</ol>
+
+<!-- ==================== 1. INTRODUCTION ==================== -->
+<h1>1. Introduction</h1>
+
+<h2>1.1 Introduction</h2>
+<p>The global e-commerce industry has experienced exponential growth over the past decade, driven by increasing internet penetration, the proliferation of mobile devices, and evolving consumer expectations for convenience and speed. According to industry reports, worldwide e-commerce sales are projected to surpass USD 8 trillion by 2027, underscoring the critical importance of robust, scalable, and user-centric online retail platforms. Modern consumers expect sub-second page loads, intuitive navigation, secure payment workflows, and real-time visibility into their order status. Meeting these expectations demands a technology stack that balances developer productivity with runtime performance and security.</p>
+<p>Shopfinity is a production-grade, full-stack e-commerce platform conceived to address these demands. It combines a <strong>Next.js 16</strong> (App Router) storefront with an <strong>ASP.NET Core 9</strong> REST API and a <strong>PostgreSQL 16</strong> relational database, delivering a comprehensive suite of features including product discovery, cart and wishlist management, secure authentication, order placement, reviews, and administrative control. The system is deployed on <strong>Render</strong> with an automated CI/CD pipeline, ensuring continuous delivery of quality software.</p>
+
+<h2>1.2 Motivation</h2>
+<p>The primary motivation behind Shopfinity was to modernise the online shopping experience by building a platform that demonstrates industry best practices in full-stack web development. Many existing open-source e-commerce solutions rely on monolithic architectures that are difficult to scale and maintain, or employ outdated technology stacks that hinder developer productivity. Shopfinity was built to bridge this gap by:</p>
+<ul>
+  <li>Adopting <strong>Clean Architecture</strong> on the backend to enforce clear separation of concerns and improve long-term maintainability.</li>
+  <li>Leveraging <strong>Next.js App Router</strong> with server and client components to deliver fast, SEO-friendly pages with rich interactivity.</li>
+  <li>Implementing <strong>security-first design</strong> with JWT tokens in HttpOnly cookies, CSRF double-submit protection, rate limiting, and input validation.</li>
+  <li>Providing a hands-on case study for learning production-grade engineering practices across the frontend, backend, and database layers.</li>
+</ul>
+
+<h2>1.3 Application</h2>
+<p>Shopfinity is designed primarily for <strong>Business-to-Consumer (B2C) retail</strong> scenarios. Its architecture and feature set make it suitable for the following applications:</p>
+<ul>
+  <li><strong>Small-to-Medium Online Retailers:</strong> Businesses seeking a modern, customisable storefront with integrated product management, cart functionality, and order tracking.</li>
+  <li><strong>Multi-Category Product Catalogs:</strong> Retailers offering diverse product categories (electronics, apparel, home goods) benefit from the category-based organisation, search with trigram suggestions, and tag-based filtering.</li>
+  <li><strong>Educational and Portfolio Projects:</strong> Software engineering students and professionals can use Shopfinity as a reference implementation of Clean Architecture, JWT security, and full-stack TypeScript/C# development.</li>
+  <li><strong>Startup MVPs:</strong> Entrepreneurs can fork the repository as a foundation for a minimum viable product, extending it with payment integration and additional business logic.</li>
+</ul>
+
+<h2>1.4 Objectives</h2>
+<p>The development of Shopfinity was guided by the following measurable objectives:</p>
+<ol>
+  <li><strong>Scalability:</strong> Design a layered backend architecture (Domain, Application, Infrastructure, API) that supports horizontal scaling and independent service evolution.</li>
+  <li><strong>User-Friendly Interface:</strong> Deliver a responsive, aesthetically polished storefront with sub-second navigation, typeahead search powered by PostgreSQL <code>pg_trgm</code>, and a streamlined checkout flow.</li>
+  <li><strong>Security:</strong> Implement defence-in-depth security including JWT authentication with HttpOnly cookie storage, CSRF token validation, rate limiting on sensitive endpoints, and parameterised database queries via Entity Framework Core.</li>
+  <li><strong>Comprehensive Feature Set:</strong> Provide end-to-end e-commerce capabilities — product catalogue, search, cart, wishlist, checkout with stock validation, order status tracking, product reviews, and an administrative dashboard.</li>
+  <li><strong>Automated Deployment:</strong> Establish a CI/CD pipeline on Render with automated builds, health checks, and zero-downtime deployments triggered by Git push events.</li>
+  <li><strong>Testability:</strong> Achieve meaningful test coverage through white-box unit tests (xUnit with in-memory SQLite) and black-box API/UI testing strategies.</li>
+</ol>
+
+<!-- ==================== 2. SRS ==================== -->
+<h1>2. Software Requirements Specification (SRS)</h1>
+
+<h2>2.1 Functional Requirements</h2>
+
+<h3>2.1.1 User Interactions</h3>
+<table>
+  <tr><th>Req ID</th><th>Requirement</th><th>Description</th><th>Priority</th></tr>
+  <tr><td>FR-U01</td><td>User Registration</td><td>Users shall register with email, password (min 8 chars, uppercase, lowercase, digit, special char), first name, and last name.</td><td>High</td></tr>
+  <tr><td>FR-U02</td><td>User Login</td><td>Users shall authenticate via email/password. The system shall issue JWT access and refresh tokens stored in HttpOnly cookies.</td><td>High</td></tr>
+  <tr><td>FR-U03</td><td>Product Browsing</td><td>Users shall browse products with pagination, filter by category, price range, and search term.</td><td>High</td></tr>
+  <tr><td>FR-U04</td><td>Product Search</td><td>Users shall receive typeahead suggestions (max 10) powered by PostgreSQL trigram similarity matching.</td><td>Medium</td></tr>
+  <tr><td>FR-U05</td><td>Cart Management</td><td>Authenticated users shall add, update quantity, and remove items from a server-backed shopping cart.</td><td>High</td></tr>
+  <tr><td>FR-U06</td><td>Wishlist Management</td><td>Users shall add/remove products to/from a wishlist with duplicate conflict handling.</td><td>Medium</td></tr>
+  <tr><td>FR-U07</td><td>Checkout</td><td>Users shall place orders from their cart. The system shall validate stock, calculate totals, and support idempotency keys.</td><td>High</td></tr>
+  <tr><td>FR-U08</td><td>Order Tracking</td><td>Users shall view their order history and current order status (Pending → Processing → Shipped → Delivered).</td><td>High</td></tr>
+  <tr><td>FR-U09</td><td>Product Reviews</td><td>Authenticated users shall submit reviews (1–5 star rating, title, comment) for products. Rate limited to 3 per 5 minutes.</td><td>Medium</td></tr>
+</table>
+
+<h3>2.1.2 Admin Interactions</h3>
+<table>
+  <tr><th>Req ID</th><th>Requirement</th><th>Description</th><th>Priority</th></tr>
+  <tr><td>FR-A01</td><td>Product CRUD</td><td>Admins shall create, read, update, and delete products with image upload support.</td><td>High</td></tr>
+  <tr><td>FR-A02</td><td>Category Management</td><td>Admins shall manage product categories (create, update, delete, reorder).</td><td>High</td></tr>
+  <tr><td>FR-A03</td><td>Order Status Update</td><td>Admins shall update order statuses via PUT /api/v1/orders/{id}/status.</td><td>High</td></tr>
+  <tr><td>FR-A04</td><td>Dashboard Overview</td><td>Admins shall view summary metrics (total products, orders, revenue) via the Dashboard endpoint.</td><td>Medium</td></tr>
+</table>
+
+<h3>2.1.3 System Interactions</h3>
+<table>
+  <tr><th>Req ID</th><th>Requirement</th><th>Description</th><th>Priority</th></tr>
+  <tr><td>FR-S01</td><td>CSRF Protection</td><td>The system shall validate X-XSRF-TOKEN headers on all mutating requests (POST, PUT, PATCH, DELETE).</td><td>High</td></tr>
+  <tr><td>FR-S02</td><td>Rate Limiting</td><td>The system shall enforce rate limits: Auth (5/min), Search (20/10s), Reviews (3/5min), Global (100/min).</td><td>High</td></tr>
+  <tr><td>FR-S03</td><td>Token Refresh</td><td>The system shall support JWT refresh token rotation via POST /api/v1/auth/refresh.</td><td>High</td></tr>
+  <tr><td>FR-S04</td><td>Health Monitoring</td><td>The system shall expose a /health endpoint verifying API and PostgreSQL connectivity.</td><td>Medium</td></tr>
+  <tr><td>FR-S05</td><td>Database Seeding</td><td>The system shall seed default admin and test user accounts in development mode.</td><td>Low</td></tr>
+</table>
+
+<h2>2.2 Non-Functional Requirements</h2>
+<table>
+  <tr><th>Req ID</th><th>Category</th><th>Requirement</th></tr>
+  <tr><td>NFR-01</td><td>Performance</td><td>API responses shall complete within 500ms under normal load. Static assets shall be cached for 1 year (Cache-Control: max-age=31536000).</td></tr>
+  <tr><td>NFR-02</td><td>Scalability</td><td>The Clean Architecture layering shall support independent scaling of API instances behind a load balancer.</td></tr>
+  <tr><td>NFR-03</td><td>Security</td><td>Passwords shall be hashed using ASP.NET Core Identity (bcrypt). All tokens shall use HS256 symmetric signing.</td></tr>
+  <tr><td>NFR-04</td><td>Reliability</td><td>Database connections shall retry on transient failure (3 retries, 5-second delay via EnableRetryOnFailure).</td></tr>
+  <tr><td>NFR-05</td><td>Availability</td><td>The deployed system shall target 99.5% uptime via Render managed hosting with automatic restart.</td></tr>
+  <tr><td>NFR-06</td><td>Maintainability</td><td>Code shall follow Clean Architecture with clear layer boundaries. AutoMapper and FluentValidation shall reduce boilerplate.</td></tr>
+  <tr><td>NFR-07</td><td>Usability</td><td>The frontend shall be responsive (mobile, tablet, desktop) with WCAG 2.1 AA colour contrast compliance.</td></tr>
+  <tr><td>NFR-08</td><td>Logging</td><td>Serilog shall provide structured logging to console and rolling file (logs/shopfinity-logs.txt) with correlation IDs.</td></tr>
+</table>
+
+<!-- ==================== 3. METHODOLOGY ==================== -->
+<h1>3. Methodology</h1>
+
+<h2>3.1 Use Case Diagram Description</h2>
+<p>The Shopfinity system identifies two primary actors: <strong>Customer</strong> and <strong>Administrator</strong>, both interacting with the central <strong>Shopfinity System</strong>.</p>
+<p><strong>Customer Use Cases:</strong></p>
+<ul>
+  <li><strong>Register / Login:</strong> The customer creates an account or authenticates. Login extends to "Receive JWT Tokens" and "Initialize CSRF Token."</li>
+  <li><strong>Browse Products:</strong> Includes "Search Products" (with typeahead suggestions) and "Filter by Category/Price."</li>
+  <li><strong>Manage Cart:</strong> Includes "Add to Cart," "Update Quantity," and "Remove Item."</li>
+  <li><strong>Manage Wishlist:</strong> Includes "Add to Wishlist" and "Remove from Wishlist."</li>
+  <li><strong>Checkout:</strong> Extends "Validate Stock," "Create Order," and "Clear Cart." Includes the optional "Provide Idempotency Key."</li>
+  <li><strong>View Orders:</strong> The customer views order history and real-time status.</li>
+  <li><strong>Submit Review:</strong> The customer rates and reviews a purchased product.</li>
+</ul>
+<p><strong>Administrator Use Cases:</strong></p>
+<ul>
+  <li><strong>Manage Products:</strong> Full CRUD operations including image upload.</li>
+  <li><strong>Manage Categories:</strong> Create, edit, delete, and reorder categories.</li>
+  <li><strong>Manage Orders:</strong> View all orders and update order status.</li>
+  <li><strong>View Dashboard:</strong> Access summary metrics.</li>
+</ul>
+
+<h2>3.2 Activity Diagram Description</h2>
+<p>The primary activity flow for the <strong>Checkout Process</strong> is described as follows:</p>
+<ol>
+  <li><strong>Start:</strong> Customer clicks "Proceed to Checkout" on the Cart page.</li>
+  <li><strong>Decision — Authenticated?</strong> If No → redirect to Login page → return to Cart after login. If Yes → continue.</li>
+  <li><strong>System: Retrieve Cart Items</strong> — The API fetches the user's cart with product details.</li>
+  <li><strong>Decision — Cart Empty?</strong> If Yes → display "Your cart is empty" message → End. If No → continue.</li>
+  <li><strong>System: Validate Stock</strong> — For each CartItem, verify Product.StockQuantity ≥ CartItem.Quantity.</li>
+  <li><strong>Decision — Stock Sufficient?</strong> If No → return error "Insufficient stock for [Product Name]" → End. If Yes → continue.</li>
+  <li><strong>System: Check Idempotency Key</strong> — If X-Idempotency-Key header is present and matches an existing order, return the existing order → End.</li>
+  <li><strong>System: Create Order</strong> — Within a database transaction: create Order record, create OrderItem records with UnitPrice snapshot, decrement Product.StockQuantity, clear CartItems.</li>
+  <li><strong>System: Commit Transaction</strong> — Persist all changes atomically.</li>
+  <li><strong>Response:</strong> Return 201 Created with OrderResponseDto.</li>
+  <li><strong>End.</strong></li>
+</ol>
+
+<h2>3.3 Sequence Diagram Description</h2>
+<p>The sequence diagram for the <strong>User Login Flow</strong> involves four participants: <strong>Browser (Next.js)</strong>, <strong>API Gateway (ASP.NET Core)</strong>, <strong>AuthService</strong>, and <strong>PostgreSQL Database</strong>.</p>
+<ol>
+  <li><strong>Browser → API:</strong> POST /api/v1/auth/login with { email, password } body.</li>
+  <li><strong>API → AuthService:</strong> Call LoginAsync(dto, cancellationToken).</li>
+  <li><strong>AuthService → Database:</strong> Query AspNetUsers by email using UserManager.FindByEmailAsync().</li>
+  <li><strong>Database → AuthService:</strong> Return ApplicationUser record (or null).</li>
+  <li><strong>AuthService:</strong> Decision — If user is null or password invalid → throw UnauthorizedAccessException.</li>
+  <li><strong>AuthService → JwtTokenGenerator:</strong> Call GenerateAccessToken(user, roles) → returns signed JWT string.</li>
+  <li><strong>AuthService → Database:</strong> INSERT into RefreshTokens table with token value, user ID, and expiry.</li>
+  <li><strong>AuthService → API:</strong> Return AuthResponseDto { AccessToken, RefreshToken, Email, Roles }.</li>
+  <li><strong>API → Browser:</strong> Set-Cookie: shopfinity_token=JWT (HttpOnly, Secure, SameSite=Lax). Set-Cookie: shopfinity_refresh=RefreshToken. Set-Cookie: XSRF-TOKEN=CsrfValue (non-HttpOnly, for JS access). Return 200 OK with response body.</li>
+  <li><strong>Browser:</strong> Store authentication state in React Context. Redirect to home page.</li>
+</ol>
+
+<h2>3.4 Class Diagram Description</h2>
+<p>The domain model consists of the following entity classes, all inheriting from the abstract <strong>BaseEntity</strong> class which provides <code>Id</code> (Guid), <code>CreatedAt</code>, and <code>UpdatedAt</code> audit fields:</p>
+<ul>
+  <li><strong>Product</strong> — Properties: Name, Slug, Description, Price (decimal), StockQuantity (int), ImageUrl, Tags (List&lt;string&gt;), SearchVector (NpgsqlTsVector), RowVersion (byte[]). Relationships: belongs to one Category (via CategoryId FK); has many OrderItems, CartItems, WishlistItems, and ProductReviews.</li>
+  <li><strong>Category</strong> — Properties: Name, Slug, Description, ImageUrl, DisplayOrder (int). Relationships: has many Products.</li>
+  <li><strong>Cart</strong> — Properties: UserId (string). Relationships: has many CartItems.</li>
+  <li><strong>CartItem</strong> — Properties: CartId (Guid), ProductId (Guid), Quantity (int). Relationships: belongs to one Cart, references one Product.</li>
+  <li><strong>Order</strong> — Properties: UserId, TotalAmount (decimal), Status (OrderStatus enum), IdempotencyKey. Relationships: has many OrderItems.</li>
+  <li><strong>OrderItem</strong> — Properties: OrderId (Guid), ProductId (Guid), Quantity (int), UnitPrice (decimal). Relationships: belongs to one Order, references one Product.</li>
+  <li><strong>WishlistItem</strong> — Properties: UserId, ProductId. Relationships: references one Product.</li>
+  <li><strong>ProductReview</strong> — Properties: UserId, UserName (denormalised), ProductId, Rating (int 1–5), Title, Comment. Relationships: references one Product.</li>
+  <li><strong>RefreshToken</strong> — Properties: UserId, Token, ExpiresAt (DateTime). Relationships: belongs to one ApplicationUser.</li>
+</ul>
+
+<h2>3.5 Software Architecture</h2>
+<p>Shopfinity employs a <strong>Layered Clean Architecture</strong> on the backend combined with a <strong>component-based architecture</strong> on the frontend.</p>
+
+<h3>3.5.1 Backend Layers</h3>
+<table>
+  <tr><th>Layer</th><th>Project</th><th>Responsibility</th><th>Dependencies</th></tr>
+  <tr><td>Domain</td><td>Shopfinity.Domain</td><td>Core entities, enums, constants. Zero external dependencies.</td><td>None</td></tr>
+  <tr><td>Application</td><td>Shopfinity.Application</td><td>Service interfaces, DTOs, validators, AutoMapper profiles. Feature-folder organisation (Auth, Products, Orders, Carts, etc.).</td><td>Domain</td></tr>
+  <tr><td>Infrastructure</td><td>Shopfinity.Infrastructure</td><td>EF Core DbContext, migrations, Identity (ApplicationUser), JWT token generator, database seeder.</td><td>Domain, Application</td></tr>
+  <tr><td>API</td><td>Shopfinity.API</td><td>Versioned controllers (v1/), middleware (Exception, CSRF, CorrelationId), DI registration, rate limiting, health checks.</td><td>All layers</td></tr>
+</table>
+
+<h3>3.5.2 Frontend Architecture</h3>
+<p>The Next.js 16 frontend uses the <strong>App Router</strong> paradigm with a clear separation of concerns:</p>
+<ul>
+  <li><strong>/app</strong> — Route definitions and page components (home, products, cart, checkout, orders, wishlist, login, register, admin).</li>
+  <li><strong>/components</strong> — Reusable UI components (Button, FormError, product cards, navigation).</li>
+  <li><strong>/services</strong> — Axios-based API service functions for each domain (authService, productService, cartService, etc.).</li>
+  <li><strong>/hooks</strong> — Custom React hooks wrapping TanStack Query (React Query) for data fetching and mutations.</li>
+  <li><strong>/context</strong> — React Context providers for authentication state management.</li>
+  <li><strong>/types</strong> — TypeScript type definitions matching backend DTOs.</li>
+  <li><strong>/providers</strong> — Application-level providers (QueryClientProvider, AuthProvider).</li>
+</ul>
+
+
+
+<!-- ==================== 4. SYSTEM IMPLEMENTATION ==================== -->
+<h1>4. System Implementation Overview</h1>
+
+<h2>4.1 Features</h2>
+
+<h3>4.1.1 User Authentication and Security</h3>
+<p>Authentication is built on <strong>ASP.NET Core Identity</strong> extended with a custom <strong>JwtTokenGenerator</strong> service. On successful login, the API issues two tokens: a short-lived JWT access token (stored in the <code>shopfinity_token</code> HttpOnly cookie) and a long-lived refresh token (stored in <code>shopfinity_refresh</code> HttpOnly cookie and persisted in the RefreshTokens database table). CSRF protection is enforced via the <strong>CsrfValidationMiddleware</strong>, which validates the <code>X-XSRF-TOKEN</code> request header against the <code>XSRF-TOKEN</code> cookie for all mutating HTTP methods. Password policy enforces minimum 8 characters with uppercase, lowercase, digit, and non-alphanumeric requirements. The auth endpoint group is protected by a rate limiter (<code>AuthRatePolicy</code>) allowing a maximum of 5 requests per minute per IP address.</p>
+
+<h3>4.1.2 Product Catalog and Search</h3>
+<p>The product catalog is exposed through the <strong>ProductsController</strong> (9 API controllers total), supporting paginated listing with filtering by search term, price range, and category. The <code>SearchProductsAsync</code> service method queries PostgreSQL using EF Core with LINQ-based filters. For typeahead suggestions, the <code>SearchSuggestionsAsync</code> method leverages PostgreSQL's <strong>pg_trgm</strong> GIN index for fast trigram similarity matching, returning up to 10 ranked suggestions. Product detail pages are served by slug-based lookup, with results cached in <strong>IMemoryCache</strong> to reduce repeated database queries.</p>
+
+<h3>4.1.3 Cart and Wishlist Management</h3>
+<p>The shopping cart is server-backed, with each authenticated user owning exactly one Cart record. CartItems are added, updated in quantity, or removed through the <strong>CartsController</strong>. Wishlist items are independently managed through the <strong>WishlistsController</strong>, supporting add, remove, and list operations with conflict handling to prevent duplicate entries. Both features require user authentication via the <code>[Authorize]</code> attribute.</p>
+
+<h3>4.1.4 Checkout and Order Management</h3>
+<p>Order placement is handled by the <code>CheckoutCartAsync</code> service method. The process includes: stock availability validation, total amount calculation, atomic order record creation with associated OrderItems (capturing UnitPrice at time of order), stock quantity decrement, and cart clearance — all within a single database transaction. An <strong>idempotency key</strong> (<code>X-Idempotency-Key</code> header) prevents duplicate orders from retry requests. Order status transitions through the <code>OrderStatus</code> enum: Pending → Processing → Shipped → Delivered (or Cancelled), managed by administrators via <code>PUT /api/v1/orders/{id}/status</code>.</p>
+
+<h3>4.1.5 Product Reviews</h3>
+<p>Authenticated users can submit product reviews consisting of a 1–5 star rating, title, and comment. The <code>UserName</code> field is denormalised onto the <code>ProductReview</code> entity for rapid display without requiring a join to the Identity tables. Submissions are rate-limited via the <code>ReviewSubmissionPolicy</code> (3 reviews per 5 minutes) to prevent abuse.</p>
+
+<h3>4.1.6 Administrative Dashboard</h3>
+<p>The admin panel is accessible to users with the <strong>Admin</strong> role and provides: full CRUD management of products and categories, image upload via the <strong>UploadsController</strong> (stored in <code>wwwroot/uploads</code>), a dashboard summary view via the <strong>DashboardController</strong>, and order status management. Role-based access control is enforced using <code>[Authorize(Roles = AppRoles.Admin)]</code> attributes.</p>
+
+<h2>4.2 Key User Interfaces</h2>
+
+<h3>4.2.1 Home Page</h3>
+<p>The home page (<code>/app/page.tsx</code>, 6.7 KB) serves as the primary landing experience. It features a hero section with promotional banners, a curated grid of featured product categories, and a selection of trending products. The page leverages Next.js server components for initial data fetching, ensuring fast first contentful paint. Navigation includes a persistent header with the Shopfinity logo, a search bar with real-time typeahead suggestions, and quick-access icons for cart, wishlist, and user account.</p>
+
+<h3>4.2.2 Product Detail Page</h3>
+<p>The product detail page (<code>/app/products/[slug]</code>) displays comprehensive product information including high-resolution product images, the product name, price, stock availability indicator, full description, and tags. Below the product details, a reviews section displays existing customer reviews with star ratings and a form for authenticated users to submit new reviews. An "Add to Cart" button triggers a React Query mutation that calls the Cart API and updates the cart count in the navigation bar. A "Add to Wishlist" toggle button allows users to save products for later.</p>
+
+<h3>4.2.3 Checkout Flow</h3>
+<p>The checkout flow begins on the Cart page (<code>/app/cart</code>), which displays all cart items with quantity adjusters and a running total. Clicking "Proceed to Checkout" navigates to <code>/app/checkout</code>, which presents an order summary with itemised pricing. Upon confirmation, the frontend sends a POST request to <code>/api/v1/orders/checkout</code> with an auto-generated idempotency key. On success, the user is redirected to an order confirmation view showing the new order ID, status ("Pending"), and order details. The Orders page (<code>/app/orders</code>) provides a chronological list of all past orders with their current status.</p>
+
+<!-- ==================== 5. RISK ANALYSIS ==================== -->
+<h1>5. Risk Analysis</h1>
+
+<h2>5.1 Assessing the Risk</h2>
+<p>The following technical risks were identified during the development and deployment of Shopfinity:</p>
+<ul>
+  <li><strong>Server Downtime:</strong> Render's managed hosting mitigates most infrastructure risks, but application-level crashes (unhandled exceptions, memory leaks) can cause service interruptions. The <code>ExceptionMiddleware</code> catches all unhandled exceptions and returns structured error responses, preventing process crashes.</li>
+  <li><strong>Database Lock Contention:</strong> Concurrent checkout operations on popular products may cause database row-level lock contention on the Products table during stock decrement. EF Core's optimistic concurrency control via the <code>RowVersion</code> column detects conflicts and throws <code>DbUpdateConcurrencyException</code>, which the application handles gracefully.</li>
+  <li><strong>Authentication Token Compromise:</strong> If a JWT access token is intercepted, an attacker gains temporary access to the victim's account. The short token lifetime (configurable, typically 15 minutes) and HttpOnly cookie storage significantly reduce this attack surface.</li>
+  <li><strong>API Abuse and DDoS:</strong> Public-facing search and product listing endpoints are vulnerable to excessive automated requests. The layered rate limiting strategy (global 100/min + endpoint-specific policies) provides defence against both targeted and distributed abuse.</li>
+  <li><strong>Data Loss from Failed Transactions:</strong> Partial checkout failures (e.g., stock decrement succeeds but order creation fails) could lead to data inconsistency. The use of EF Core's implicit transaction scope ensures atomicity — either all operations succeed or all are rolled back.</li>
+</ul>
+
+<h2>5.2 RMMM Plan (Risk Mitigation, Monitoring, and Management)</h2>
+<table>
+  <tr><th>Risk ID</th><th>Risk Description</th><th>Likelihood</th><th>Impact</th><th>Mitigation Strategy</th><th>Monitoring Approach</th></tr>
+  <tr><td>R-01</td><td>SQL Injection / Database Compromise</td><td>Low</td><td>Critical</td><td>EF Core parameterised queries used exclusively; FluentValidation sanitises all inputs before data layer.</td><td>Serilog logs all database query exceptions; periodic code review for raw SQL usage.</td></tr>
+  <tr><td>R-02</td><td>JWT Token Theft via XSS</td><td>Medium</td><td>Critical</td><td>JWT stored in HttpOnly cookies (inaccessible to JavaScript). Input sanitisation applied on all user-generated content.</td><td>Browser Content-Security-Policy headers; automated dependency vulnerability scanning.</td></tr>
+  <tr><td>R-03</td><td>CSRF Attack on Mutating Endpoints</td><td>Low</td><td>High</td><td>CsrfValidationMiddleware validates X-XSRF-TOKEN header (double-submit cookie pattern) on POST/PUT/PATCH/DELETE.</td><td>Middleware logs all CSRF validation failures with correlation IDs.</td></tr>
+  <tr><td>R-04</td><td>Brute-Force Login Attack</td><td>Medium</td><td>High</td><td>AuthRatePolicy limits auth endpoints to 5 req/min per IP. ASP.NET Core Identity supports account lockout.</td><td>Rate limit rejection events logged via Serilog; alert on sustained 429 responses.</td></tr>
+  <tr><td>R-05</td><td>Database Connection Failure</td><td>Low</td><td>Critical</td><td>EnableRetryOnFailure configured (3 retries, 5s delay). Render managed PostgreSQL with automatic failover.</td><td>/health endpoint with NpgSql health check; Render uptime monitoring.</td></tr>
+  <tr><td>R-06</td><td>Duplicate Order Submission</td><td>Medium</td><td>High</td><td>Idempotency keys stored in Orders.IdempotencyKey (UNIQUE constraint) prevent duplicate order creation.</td><td>Application logs duplicate key detection events.</td></tr>
+  <tr><td>R-07</td><td>Unauthorised Admin Access</td><td>Low</td><td>Critical</td><td>[Authorize(Roles = "Admin")] enforced on all admin endpoints. No runtime role escalation permitted.</td><td>Audit log of admin actions; role assignment restricted to database seeder.</td></tr>
+  <tr><td>R-08</td><td>API Abuse / DDoS via Search</td><td>High</td><td>Medium</td><td>SearchRatePolicy (20/10s per IP) + Global limiter (100/min per IP). Response compression reduces bandwidth.</td><td>Rate limiter metrics logged; Render bandwidth monitoring dashboard.</td></tr>
+  <tr><td>R-09</td><td>Stock Race Condition at Checkout</td><td>Medium</td><td>High</td><td>Optimistic concurrency via Products.RowVersion; stock validation within database transaction.</td><td>DbUpdateConcurrencyException events logged with product and order context.</td></tr>
+  <tr><td>R-10</td><td>CI/CD Deployment Failure</td><td>Low</td><td>Medium</td><td>Render auto-reverts to previous deployment on build failure. Local dotnet test and npm run build verified before push.</td><td>Render deployment logs; /health endpoint smoke test post-deployment.</td></tr>
+  <tr><td>R-11</td><td>Sensitive Credentials in Source Control</td><td>Low</td><td>Critical</td><td>.gitignore excludes appsettings.Production.json, .env.local, and User Secrets. Secrets injected via Render env vars.</td><td>Pre-commit hooks to scan for credential patterns; GitHub secret scanning alerts.</td></tr>
+  <tr><td>R-12</td><td>Stale Cache Serving Outdated Data</td><td>Low</td><td>Medium</td><td>IMemoryCache entries have configured expiration. Cache invalidated on product update/delete operations.</td><td>Cache hit/miss ratio logged; manual cache clear endpoint available for admin.</td></tr>
+</table>
+
+<!-- ==================== 6. SOCIAL AND SECURITY IMPACT ==================== -->
+<h1>6. Social and Security Impact</h1>
+
+<h2>6.1 Social Impact</h2>
+<p>Shopfinity demonstrates how modern web technologies can empower <strong>local businesses</strong> to establish a professional online presence without the overhead costs of proprietary e-commerce platforms. By providing an open-source, production-ready codebase, Shopfinity enables:</p>
+<ul>
+  <li><strong>Small Business Digitalisation:</strong> Local retailers can deploy a fully functional online store, reaching customers beyond their geographical limitations and competing with established e-commerce giants.</li>
+  <li><strong>Employment and Skill Development:</strong> The project serves as an educational resource for aspiring software engineers, providing a real-world case study of Clean Architecture, full-stack TypeScript/C# development, and cloud deployment practices.</li>
+  <li><strong>Consumer Convenience:</strong> Features such as typeahead search, wishlist management, and real-time order tracking improve the consumer shopping experience, reducing friction and increasing purchase confidence.</li>
+  <li><strong>Accessibility:</strong> The responsive frontend design ensures that users on mobile devices — which represent the majority of internet users in developing regions — can access the full feature set without degradation.</li>
+</ul>
+
+<h2>6.2 Security and Reliability</h2>
+<p>Security and reliability are foundational pillars of Shopfinity's architecture:</p>
+<ul>
+  <li><strong>JWT Authentication:</strong> Access tokens are signed with HS256 (symmetric key) and stored in HttpOnly, Secure, SameSite=Lax cookies, preventing JavaScript access and mitigating XSS-based token theft. Refresh tokens enable seamless session extension without re-authentication.</li>
+  <li><strong>CSRF Double-Submit Cookie Pattern:</strong> The <code>CsrfValidationMiddleware</code> ensures that all state-changing API requests carry a valid <code>X-XSRF-TOKEN</code> header matching the server-issued <code>XSRF-TOKEN</code> cookie, protecting against cross-site request forgery attacks.</li>
+  <li><strong>PostgreSQL Data Integrity:</strong> Foreign key constraints, NOT NULL constraints, UNIQUE constraints (e.g., on Product.Slug, Order.IdempotencyKey), and CHECK constraints (e.g., ProductReview.Rating between 1 and 5) enforce data integrity at the database level, providing a safety net independent of application logic.</li>
+  <li><strong>Structured Logging with Serilog:</strong> Every request is tagged with a <code>CorrelationId</code> (via <code>CorrelationIdMiddleware</code>), enabling end-to-end request tracing across log entries. Logs are written to both console and rolling daily files.</li>
+  <li><strong>Health Monitoring:</strong> The <code>/health</code> endpoint performs an active PostgreSQL connectivity check, enabling Render and external monitoring tools to detect and respond to service degradation automatically.</li>
+  <li><strong>Transient Fault Handling:</strong> Database connections are configured with <code>EnableRetryOnFailure</code> (3 retries, 5-second maximum delay), ensuring resilience against momentary network interruptions or database restarts.</li>
+</ul>
+
+<!-- ==================== 7. CONCLUSION ==================== -->
+<h1>7. Conclusion</h1>
+<p>The Shopfinity project has successfully demonstrated the end-to-end development of a modern, production-grade e-commerce platform. Through the careful selection of technologies — Next.js 16 for the frontend, ASP.NET Core 9 for the backend, and PostgreSQL 16 for data persistence — the project achieves a balance of developer productivity, runtime performance, and security robustness.</p>
+<p>Key learnings from this project include:</p>
+<ul>
+  <li><strong>Clean Architecture Effectiveness:</strong> Separating the backend into Domain, Application, Infrastructure, and API layers proved invaluable for testability (white-box testing of service logic with in-memory databases) and maintainability (new features added as self-contained feature folders).</li>
+  <li><strong>Security as a First-Class Concern:</strong> Implementing JWT + CSRF + Rate Limiting from the outset was more effective than retrofitting security onto a completed application.</li>
+  <li><strong>PostgreSQL-Specific Optimisations:</strong> Leveraging <code>pg_trgm</code> for trigram search suggestions and GIN indexes provided a search experience typically associated with dedicated search engines, without additional infrastructure.</li>
+  <li><strong>TypeScript End-to-End:</strong> Sharing type definitions between the frontend (TypeScript interfaces) and backend (DTOs) reduced integration bugs and improved developer confidence during API changes.</li>
+</ul>
+
+<p><strong>Future Enhancements:</strong></p>
+<ol>
+  <li><strong>Payment Gateway Integration:</strong> Integration with Stripe or PayPal for real payment processing.</li>
+  <li><strong>Real-Time Notifications with SignalR:</strong> Push live order status updates to the customer's browser via WebSocket connections.</li>
+  <li><strong>AI-Based Product Recommendations:</strong> A recommendation engine using collaborative filtering and purchase history analysis to suggest relevant products and increase average order value.</li>
+  <li><strong>Elasticsearch Integration:</strong> Dedicated search infrastructure for more powerful full-text search, faceted filtering, and relevance ranking at scale.</li>
+  <li><strong>React Native Mobile App:</strong> A mobile application consuming the existing REST API, extending platform reach to iOS and Android.</li>
+  <li><strong>Redis Distributed Caching:</strong> Replacing IMemoryCache with Redis to support cache sharing across horizontally scaled API instances.</li>
+  <li><strong>Docker Containerisation:</strong> Packaging all services into Docker containers with Docker Compose for consistent development and deployment environments.</li>
+  <li><strong>Enhanced Analytics Dashboard:</strong> Sales analytics, revenue charts, and inventory forecasting using a charting library such as Recharts.</li>
+</ol>
+
+<!-- ==================== 8. APPENDIX ==================== -->
+<h1>8. Appendix</h1>
+
+<h2>8.1 Software Development Timeline (Gantt Chart)</h2>
+<div class="gantt">
+Phase / Task                    | W1 | W2 | W3 | W4 | W5 | W6 | W7 | W8 | W9 | W10| W11| W12
+────────────────────────────────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────
+1. Requirements &amp; Planning      | ██ | ██ |    |    |    |    |    |    |    |    |    |
+2. Database Design &amp; Schema     |    | ██ | ██ |    |    |    |    |    |    |    |    |
+3. Backend: Domain &amp; App Layer  |    |    | ██ | ██ |    |    |    |    |    |    |    |
+4. Backend: Infrastructure      |    |    |    | ██ | ██ |    |    |    |    |    |    |
+5. Backend: API Controllers     |    |    |    |    | ██ | ██ |    |    |    |    |    |
+6. Auth &amp; Security (JWT/CSRF)   |    |    |    |    |    | ██ | ██ |    |    |    |    |
+7. Frontend: Core Pages         |    |    |    |    |    |    | ██ | ██ |    |    |    |
+8. Frontend: Cart/Checkout/Orders|   |    |    |    |    |    |    | ██ | ██ |    |    |
+9. Admin Dashboard              |    |    |    |    |    |    |    |    | ██ | ██ |    |
+10. Testing (Unit + Black-box)  |    |    |    |    |    |    |    |    |    | ██ | ██ |
+11. Deployment &amp; CI/CD (Render) |    |    |    |    |    |    |    |    |    |    | ██ | ██
+12. Documentation &amp; Report      |    |    |    |    |    |    |    |    |    |    |    | ██
+</div>
+
+<h2>8.2 Individual Contribution</h2>
+<table>
+  <tr><th>Team Member</th><th>Role</th><th>Key Contributions</th></tr>
+  <tr>
+    <td><strong>Nazrul Islam</strong></td>
+    <td>Team Lead — Backend &amp; Architecture</td>
+    <td>
+      <ul>
+        <li>Designed and implemented the Clean Architecture backend (Domain, Application, Infrastructure, API layers).</li>
+        <li>Developed all 9 API controllers (Auth, Products, Categories, Carts, Orders, Reviews, Wishlists, Uploads, Dashboard).</li>
+        <li>Implemented JWT authentication with HttpOnly cookies, CSRF middleware, and rate limiting policies.</li>
+        <li>Configured Entity Framework Core with PostgreSQL, migrations, and database seeding.</li>
+        <li>Set up the CI/CD pipeline on Render with health checks and automated deployments.</li>
+        <li>Wrote white-box unit tests (xUnit) for the ProductService with 7 test cases covering slug generation, search, caching, and pagination.</li>
+        <li>Authored the project documentation and technical report.</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Turjo Naimur</strong></td>
+    <td>Frontend &amp; UI Design</td>
+    <td>
+      <ul>
+        <li>Designed and developed the Next.js 16 (App Router) storefront with TypeScript.</li>
+        <li>Implemented all frontend pages: Home, Products (listing + detail), Cart, Checkout, Orders, Wishlist, Login, Register, and Admin panel.</li>
+        <li>Built reusable UI components (Button, FormError, product cards, navigation bar with search typeahead).</li>
+        <li>Integrated TanStack Query (React Query) for API data fetching with caching and optimistic updates.</li>
+        <li>Implemented form handling with React Hook Form + Zod schema validation.</li>
+        <li>Configured Axios with withCredentials for HttpOnly cookie-based authentication.</li>
+        <li>Styled the application using Tailwind CSS 4 with responsive mobile-first design.</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+<br>
+<hr>
+<p style="text-align: center; color: #888; font-size: 12px;">Shopfinity Project Report — Nazrul Islam &amp; Turjo Naimur — May 2026</p>
+
+</body>
+</html>
